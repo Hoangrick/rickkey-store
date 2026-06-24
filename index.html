@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rickkey Studio | Premium Custom Keyboard Store</title>
+    <style>
+        :root {
+            --primary-color: #007aff;    /* Màu xanh da trời chủ đạo */
+            --primary-light: #4da6ff;    /* Màu xanh da trời nhạt tạo điểm nhấn */
+            --bg-dark: #0a0a0c;          /* Phông nền chính màu đen tuyền đồng bộ logo */
+            --bg-secondary: #121216;     /* Phông nền khối xám đen nhẹ */
+            --card-bg: #16161c;          /* Nền thẻ sản phẩm màu đen xám bóng bẩy */
+            --text-light: #ffffff;       /* Màu chữ chính sáng trắng */
+            --text-gray: #9c9ca4;        /* Màu chữ mô tả xám nhẹ */
+            --border-color: #2c2c2e;     /* Màu đường viền tối tinh tế */
+        }
+
+        * {
+            margin: 0; padding: 0; box-sizing: border-box;
+            font-family: '-apple-system', BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        header {
+            position: fixed; top: 0; left: 0; width: 100%;
+            background: rgba(10, 10, 12, 0.95); backdrop-filter: blur(12px);
+            padding: 12px 10%; display: flex; justify-content: space-between;
+            align-items: center; z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo-container { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+        .logo-img { width: 45px; height: 45px; object-fit: cover; border-radius: 50%; border: 1.5px solid var(--primary-color); }
+        .logo-text { font-size: 22px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--primary-color); }
+
+        nav { display: flex; align-items: center; }
+        nav a { color: var(--text-gray); text-decoration: none; margin-left: 30px; font-weight: 500; transition: 0.3s; letter-spacing: 0.5px; }
+        nav a:hover, nav a.active { color: var(--primary-color); }
+
+        .btn-instagram {
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700 !important;
+            border: 1px solid rgba(220, 39, 67, 0.4);
+            padding: 6px 16px;
+            border-radius: 30px;
+            transition: 0.3s !important;
+        }
+        .btn-instagram:hover {
+            box-shadow: 0 4px 15px rgba(220, 39, 67, 0.2);
+            transform: scale(1.03);
+        }
+
+        .cart-icon-container {
+            margin-left: 30px; position: relative; cursor: pointer;
+            background: rgba(0, 122, 255, 0.08); padding: 8px 18px;
+            border-radius: 20px; border: 1px solid rgba(0, 122, 255, 0.2);
+            color: var(--primary-light); font-weight: 600; transition: 0.3s;
+        }
+        .cart-icon-container:hover { background: rgba(0, 122, 255, 0.2); border-color: var(--primary-color); }
+        .cart-count { position: absolute; top: -5px; right: -5px; background: #ff453a; color: white; font-size: 11px; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+
+        .banner { padding: 160px 10% 40px 10%; text-align: center; background: radial-gradient(circle at top, rgba(0, 122, 255, 0.08) 0%, transparent 60%); }
+        .banner-logo-center { width: 85px; height: 85px; object-fit: cover; border-radius: 50%; border: 2px solid var(--primary-color); margin-bottom: 15px; box-shadow: 0 0 20px rgba(0, 122, 255, 0.2); }
+        .banner h1 { font-size: 36px; margin-bottom: 10px; color: var(--text-light); }
+        .banner h1 span { color: var(--primary-color); }
+        .banner p { color: var(--text-gray); font-size: 15px; max-width: 600px; margin: 0 auto; }
+
+        /* Khung Grid sản phẩm */
+        .shop-container { padding: 20px 3% 80px 3%; max-width: 1600px; margin: 0 auto; }
+        .products-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 24px; }
+        
+        .product-card {
+            width: calc(25% - 20px); min-width: 290px; max-width: 350px;
+            background: var(--card-bg); border-radius: 16px; overflow: hidden;
+            border: 1px solid var(--border-color); text-align: left;
+            transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex; flex-direction: column; justify-content: space-between;
+            cursor: pointer; position: relative;
+            box-shadow: 0 4px 25px rgba(0,0,0,0.5);
+        }
+        .product-card:hover { border-color: var(--primary-color); box-shadow: 0 20px 40px rgba(0, 122, 255, 0.12); transform: translateY(-5px); }
+
+        .product-slider-box {
+            width: 100%; height: 230px; overflow: hidden; position: relative; background: #16161c;
+        }
+        .slider-wrapper {
+            display: flex; width: 100%; height: 100%; transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .slider-wrapper img {
+            width: 100%; height: 100%; object-fit: cover; flex-shrink: 0;
+        }
+
+        .slide-arrow {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            background: rgba(0,0,0,0.6); color: var(--primary-light);
+            border: 1px solid var(--border-color); width: 34px; height: 34px; border-radius: 50%;
+            font-size: 16px; cursor: pointer; z-index: 5; transition: 0.2s;
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0;
+        }
+        .product-card:hover .slide-arrow { opacity: 1; }
+        .slide-arrow:hover { background: var(--primary-color); color: #fff; }
+        .arrow-left { left: 12px; }
+        .arrow-right { right: 12px; }
+
+        .product-info { padding: 18px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        .product-tag { align-self: flex-start; display: inline-block; background: rgba(0, 122, 255, 0.12); color: var(--primary-light); font-size: 11px; padding: 4px 10px; border-radius: 4px; font-weight: 600; text-transform: uppercase; margin-bottom: 12px; letter-spacing: 0.5px; }
+        .product-name { font-size: 17px; margin-bottom: 8px; font-weight: 600; color: var(--text-light); min-height: 50px; line-height: 1.4; }
+        .product-desc { color: var(--text-gray); font-size: 13px; margin-bottom: 20px; text-align: justify; height: 60px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; }
+        .product-bottom { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); padding-top: 15px; }
+        .product-price { font-size: 17px; color: var(--primary-light); font-weight: 700; }
+        
+        .btn-add-cart {
+            padding: 8px 14px; background: transparent; border: 1.5px solid var(--primary-color);
+            color: var(--primary-color); font-weight: 600; cursor: pointer; border-radius: 8px;
+            font-size: 12.5px; transition: 0.2s;
+        }
+        .btn-add-cart:hover { background: var(--primary-color); color: #fff; box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3); }
+
+        /* BẢNG HIỂN THỊ CHI TIẾT SẢN PHẨM (MODAL CHI TIẾT) */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(8px);
+            z-index: 3000; display: flex; justify-content: center; align-items: center;
+            opacity: 0; pointer-events: none; transition: 0.3s ease;
+        }
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+        
+        .modal-container {
+            background: #111115; width: 92%; max-width: 950px; max-height: 85vh;
+            border-radius: 16px; border: 1px solid var(--border-color);
+            overflow-y: auto; display: flex; flex-wrap: wrap; position: relative;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+        }
+        .close-modal { position: absolute; top: 15px; right: 20px; font-size: 35px; color: var(--text-gray); cursor: pointer; z-index: 10; }
+        .close-modal:hover { color: var(--primary-color); }
+
+        .modal-left { width: 50%; padding: 25px; display: flex; flex-direction: column; gap: 15px; }
+        .modal-main-img { width: 100%; height: 360px; object-fit: cover; border-radius: 10px; border: 1px solid var(--border-color); }
+        
+        .modal-thumb-grid { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; scroll-behavior: smooth; }
+        .modal-thumb-grid::-webkit-scrollbar { height: 5px; }
+        .modal-thumb-grid::-webkit-scrollbar-thumb { background: rgba(0, 122, 255, 0.3); border-radius: 4px; }
+        .modal-thumb { width: 65px; height: 65px; object-fit: cover; border-radius: 6px; cursor: pointer; border: 2px solid transparent; opacity: 0.4; flex-shrink: 0; transition: 0.2s; }
+        .modal-thumb.active, .modal-thumb:hover { border-color: var(--primary-color); opacity: 1; }
+
+        .modal-right { width: 50%; padding: 30px; display: flex; flex-direction: column; justify-content: space-between; border-left: 1px solid var(--border-color); }
+        .modal-title { font-size: 24px; color: var(--text-light); margin-bottom: 10px; font-weight: 600; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
+        .modal-price { font-size: 24px; color: var(--primary-light); font-weight: 700; margin-bottom: 15px; }
+        .modal-full-desc { color: var(--text-gray); font-size: 14px; margin-bottom: 20px; overflow-y: auto; max-height: 180px; padding-right: 5px; text-align: justify; }
+        .modal-specs { background: var(--bg-secondary); padding: 14px; border-radius: 8px; margin-bottom: 20px; font-size: 13px; color: #c8c8cd; border: 1px solid var(--border-color); }
+        .modal-specs div { margin-bottom: 5px; }
+        .modal-specs span { color: var(--primary-light); font-weight: 600; }
+
+        /* Sidebar Giỏ Hàng */
+        .cart-sidebar { position: fixed; top: 0; right: -420px; width: 420px; height: 100vh; background: #0d0d11; box-shadow: -10px 0 40px rgba(0,0,0,0.8); z-index: 2500; transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1); padding: 30px; display: flex; flex-direction: column; border-left: 1px solid var(--border-color); }
+        .cart-sidebar.active { right: 0; }
+        .cart-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; margin-bottom: 20px; color: var(--text-light); }
+        .cart-items-list { flex: 1; overflow-y: auto; }
+        
+        .cart-item { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; background: var(--bg-secondary); padding: 12px; border-radius: 8px; border: 1px solid var(--border-color); position: relative; }
+        .cart-item-img { width: 60px; height: 60px; object-fit: cover; border-radius: 4px; }
+        .btn-remove-item {
+            background: transparent; border: none; color: #ff453a; font-size: 12px; 
+            font-weight: 600; cursor: pointer; padding: 4px 8px; border-radius: 4px; 
+            transition: 0.2s; display: flex; align-items: center; gap: 2px;
+        }
+        .btn-remove-item:hover { background: rgba(255, 69, 58, 0.15); }
+
+        .cart-footer { border-top: 1px solid var(--border-color); padding-top: 20px; }
+        .cart-total { display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 16px; font-weight: 600; color: var(--text-light); }
+        .btn-checkout { width: 100%; padding: 14px; background: var(--primary-color); border: none; color: #ffffff; font-size: 15px; font-weight: 700; border-radius: 6px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: 0.2s; }
+        .btn-checkout:hover { background: #0062cc; box-shadow: 0 4px 15px rgba(0, 122, 255, 0.4); }
+
+        footer { text-align: center; padding: 40px; border-top: 1px solid var(--border-color); color: var(--text-gray); font-size: 13px; background: #070709; }
+
+        @media (max-width: 1400px) { .product-card { width: calc(33.33% - 20px); } }
+        @media (max-width: 900px) { .product-card { width: calc(50% - 15px); } }
+        @media (max-width: 650px) {
+            .product-card { width: 100%; max-width: 100%; }
+            .modal-left, .modal-right { width: 100%; border-left: none; }
+            .modal-container { max-height: 90vh; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Menu -->
+    <header>
+        <a href="#" class="logo-container">
+            <img src="z7945013840128_57f4600bf816044cfebd68c4c5d55e86.jpg" alt="Rickkey Logo" class="logo-img">
+            <span class="logo-text">Rickkey</span>
+        </a>
+        <nav>
+            <a href="#" class="active">Showroom Custom</a>
+            <a href="https://www.instagram.com/rickkey2110" target="_blank" class="btn-instagram">📸 Instagram</a>
+            <div class="cart-icon-container" onclick="toggleCart()">
+                <span>💼 Giỏ Hàng</span>
+                <div class="cart-count" id="cartCount">0</div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Banner -->
+    <section class="banner">
+        <img src="z7945013840128_57f4600bf816044cfebd68c4c5d55e86.jpg" alt="Rickkey Studio Logo" class="banner-logo-center">
+        <h1>Premium Showcase <span>Rickkey Studio</span></h1>
+        <p>Không gian trưng bày các kiệt tác cơ học giới hạn. Chọn sản phẩm để xem cấu hình chi tiết, album ảnh độ nét cao và đặt hàng nhanh chóng.</p>
+    </section>
+
+    <!-- Khu Vực Trưng Bày Hệ 6 Sản Phẩm -->
+    <section class="shop-container">
+        <div class="products-grid">
+            
+            <!-- SẢN PHẨM 1: LUCKY65 V3 PRO -->
+            <div class="product-card" onclick="openProductModal(0)">
+                <div class="product-slider-box">
+                    <button class="slide-arrow arrow-left" onclick="event.stopPropagation(); moveCardSlide(0, -1)">&#10094;</button>
+                    <button class="slide-arrow arrow-right" onclick="event.stopPropagation(); moveCardSlide(0, 1)">&#10095;</button>
+                    <div class="slider-wrapper" id="slider-0">
+                        <img src="z7945011605671_1f27f279e30a9bc79ff56a9e5255b613.jpg">
+                        <img src="z7945011603191_d536133070e58d4595096fe4835ec19f.jpg">
+                        <img src="z7945011616125_964d4a6c19b25b9ef6ff8c76ee604d1c.jpg">
+                        <img src="z7945011629281_d55a2d79bef9f2aa5a7f7721fe013e00.jpg">
+                        <img src="z7945011632905_1a8320bf7c8c3676a9f20c5c4e924e5f.jpg">
+                        <img src="z7945011717366_a36f2c73857a3ecbba9125ed7c4b7f7a.jpg">
+                        <img src="z7945011726576_b0a95cfed2d94f0b23b36a952d42948f.jpg">
+                    </div>
+                </div>
+                <div class="product-info">
+                    <div>
+                        <span class="product-tag">🔥 Best Seller</span>
+                        <h3 class="product-name">Lucky65 V3 Pro Custom Set</h3>
+                        <p class="product-desc">Sản phẩm custom tối thượng chế tác thủ công từ vỏ nhôm CNC cao cấp, kết cấu mạch xuôi hotswap mượt mà cùng bộ phụ kiện cáp xoắn dù phi công và keycap nghệ thuật.</p>
+                    </div>
+                    <div class="product-bottom">
+                        <div class="product-price">1.950.000 đ</div>
+                        <!-- Đã đổi chữ tại đây -->
+                        <button class="btn-add-cart" onclick="event.stopPropagation(); addToCart(0)">Thêm Vào Giỏ Hàng</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SẢN PHẨM 2: GMK67 -->
+            <div class="product-card" onclick="openProductModal(1)">
+                <div class="product-slider-box">
+                    <button class="slide-arrow arrow-left" onclick="event.stopPropagation(); moveCardSlide(1, -1)">&#10094;</button>
+                    <button class="slide-arrow arrow-right" onclick="event.stopPropagation(); moveCardSlide(1, 1)">&#10095;</button>
+                    <div class="slider-wrapper" id="slider-1">
+                        <img src="z7945011790194_9afeb382f09b19321ba3850e9f2c9588.jpg">
+                        <img src="z7945011800835_c7c756509e8549987c49d5cc94667167.jpg">
+                        <img src="z7945011825701_54e04501468d3c13fc1bff5ace03be16.jpg">
+                        <img src="z7945011933547_dd2b6a273c176bb001c5708047f83739.jpg">
+                        <img src="z7945011949747_9c7a2a38e484b53ab11fba0f8c05b31b.jpg">
+                    </div>
+                </div>
+                <div class="product-info">
+                    <div>
+                        <span class="product-tag">✨ Hot Trend</span>
+                        <h3 class="product-name">GMK67 Custom Set Deluxe</h3>
+                        <p class="product-desc">Phiên bản custom đột phá phân khúc với cấu trúc Gasket Mount siêu êm ái, trang bị núm xoay đa năng tiện lợi và phong cách phối màu keycap sang trọng đi kèm cáp xoắn.</p>
+                    </div>
+                    <div class="product-bottom">
+                        <div class="product-price">1.650.000 đ</div>
+                        <!-- Đã đổi chữ tại đây -->
+                        <button class="btn-add-cart" onclick="event.stopPropagation(); addToCart(1)">Thêm Vào Giỏ Hàng</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SẢN PHẨM 3: MONSGEEK M1W -->
+            <div class="product-card" onclick="openProductModal(2)">
+                <div class="product-slider-box">
+                    <button class="slide-arrow arrow-left" onclick="event.stopPropagation(); moveCardSlide(2, -1)">&#10094;</button>
+                    <button class="slide-arrow arrow-right" onclick="event.stopPropagation(); moveCardSlide(2, 1)">&#10095;</button>
+                    <div class="slider-wrapper" id="slider-2">
+                        <img src="z7945011859901_a6f81d8d1a3ae04f9db9cddfc330aa96.jpg">
+                        <img src="z7945011884900_e989d5aa54b0b21e9c86bb8df6fe83d6.jpg">
+                    </div>
+                </div>
+                <div class="product-info">
+                    <div>
+                        <span class="product-tag">👑 Premium Elite</span>
+                        <h3 class="product-name">MonsGeek M1W V3 Custom Set</h3>
+                        <p class="product-desc">Siêu phẩm nhôm nguyên khối layout 75% tiêu chuẩn chuyên nghiệp. Trang bị kết nối 3 chế độ không độ trễ, mạch xuôi tinh xảo và hệ thống cáp phi công xoắn dù tone-sur-tone sang trọng.</p>
+                    </div>
+                    <div class="product-bottom">
+                        <div class="product-price">2.250.000 đ</div>
+                        <!-- Đã đổi chữ tại đây -->
+                        <button class="btn-add-cart" onclick="event.stopPropagation(); addToCart(2)">Thêm Vào Giỏ Hàng</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SẢN PHẨM 4: RAINY75 -->
+            <div class="product-card" onclick="openProductModal(3)">
+                <div class="product-slider-box">
+                    <button class="slide-arrow arrow-left" onclick="event.stopPropagation(); moveCardSlide(3, -1)">&#10094;</button>
+                    <button class="slide-arrow arrow-right" onclick="event.stopPropagation(); moveCardSlide(3, 1)">&#10095;</button>
+                    <div class="slider-wrapper" id="slider-3">
+                        <img src="z7945013851434_c0961ff35708563c15a228ae2aa80021.jpg">
+                        <img src="z7945013902756_292f01b986ba5a0666200ebc279a19b7.jpg">
+                        <img src="z7945013944684_e8d8ab663d6144ba09e414f4b9d80fb2.jpg">
+                        <img src="z7945013956386_e1371f9ecc59dd4b219e056967b0ace7.jpg">
+                        <img src="z7945013968592_7994cbec4915ef2a6e6943ac5190e127.jpg">
+                        <img src="z7945013977418_2e18e471353a1441fd625ac255a917d7.jpg">
+                    </div>
+                </div>
+                <div class="product-info">
+                    <div>
+                        <span class="product-tag">💎 Ultra Masterpiece</span>
+                        <h3 class="product-name">Wob Rainy75 Custom Set</h3>
+                        <p class="product-desc">"Quái vật phân khúc" nhôm nguyên khối sở hữu chất âm gõ phím độc bản tuyệt hảo như tiếng mưa rơi. Được tinh chỉnh tỉ mỉ tại Rickkey Studio cùng set dây phi công kim loại Luxury đẳng cấp.</p>
+                    </div>
+                    <div class="product-bottom">
+                        <div class="product-price">2.500.000 đ</div>
+                        <!-- Đã đổi chữ tại đây -->
+                        <button class="btn-add-cart" onclick="event.stopPropagation(); addToCart(3)">Thêm Vào Giỏ Hàng</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SẢN PHẨM 5: WEIKAV RO75 -->
+            <div class="product-card" onclick="openProductModal(4)">
+                <div class="product-slider-box">
+                    <button class="slide-arrow arrow-left" onclick="event.stopPropagation(); moveCardSlide(4, -1)">&#10094;</button>
+                    <button class="slide-arrow arrow-right" onclick="event.stopPropagation(); moveCardSlide(4, 1)">&#10095;</button>
+                    <div class="slider-wrapper" id="slider-4">
+                        <img src="z7945011681177_ec8b46f571dc04e374c9f4f06456f3e2.jpg">
+                        <img src="z7945011687569_ad29c0865479ba12bad6d38f33331080.jpg">
+                        <img src="z7945011895154_89ed9e4d64f0de0b961ee5cb97c248a7.jpg">
+                        <img src="z7945011897137_5c42bb40a9472936b749535a7837555f.jpg">
+                    </div>
+                </div>
+                <div class="product-info">
+                    <div>
+                        <span class="product-tag">🌌 Popular Pick</span>
+                        <h3 class="product-name">Weikav RO75 Custom Set Pro</h3>
+                        <p class="product-desc">Siêu phẩm cơ cấu tạ mặt lưng độc đáo thế hệ mới từ nhà Weikav. Lớp vỏ Anode mịn màng mượt mà tuyệt đối, layout 75% chuẩn mực phối hợp cùng bộ dây dù xoắn lò xo phi công tinh xảo.</p>
+                    </div>
+                    <div class="product-bottom">
+                        <div class="product-price">1.850.000 đ</div>
+                        <!-- Đã đổi chữ tại đây -->
+                        <button class="btn-add-cart" onclick="event.stopPropagation(); addToCart(4)">Thêm Vào Giỏ Hàng</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SẢN PHẨM 6: AKKO 5075B PLUS -->
+            <div class="product-card" onclick="openProductModal(5)">
+                <div class="product-slider-box">
+                    <button class="slide-arrow arrow-left" onclick="event.stopPropagation(); moveCardSlide(5, -1)">&#10094;</button>
+                    <button class="slide-arrow arrow-right" onclick="event.stopPropagation(); moveCardSlide(5, 1)">&#10095;</button>
+                    <div class="slider-wrapper" id="slider-5">
+                        <img src="z7945011644656_4760cb7fb5d814ca8e886049371337e0.jpg">
+                        <img src="z7945011647178_7d96884b5e89518d4ad85f771a999bb1.jpg">
+                    </div>
+                </div>
+                <div class="product-info">
+                    <div>
+                        <span class="product-tag">🎨 NEW ARRIVAL</span>
+                        <h3 class="product-name">Akko 5075B Plus Custom Set</h3>
+                        <p class="product-desc">Mẫu phím cơ sở hữu dải LED viền RGB đôi rực rỡ và núm xoay đa chức năng. Cấu trúc Gasket Mount cải tiến mang lại chất âm gõ phím cực thocky, đi kèm set dây xoắn lò xo phi công chuyên nghiệp.</p>
+                    </div>
+                    <div class="product-bottom">
+                        <div class="product-price">1.750.000 đ</div>
+                        <!-- Đã đổi chữ tại đây -->
+                        <button class="btn-add-cart" onclick="event.stopPropagation(); addToCart(5)">Thêm Vào Giỏ Hàng</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- BẢNG POPUP CHI TIẾT CHUNG CHO CẢ 6 SẢN PHẨM -->
+    <div class="modal-overlay" id="productModal" onclick="closeProductModal()">
+        <div class="modal-container" onclick="event.stopPropagation()">
+            <span class="close-modal" onclick="closeProductModal()">&times;</span>
+            
+            <div class="modal-left">
+                <img src="" id="modalMainImg" class="modal-main-img">
+                <div class="modal-thumb-grid" id="modalThumbGrid"></div>
+            </div>
+            
+            <div class="modal-right">
+                <div>
+                    <h2 class="modal-title" id="modalTitle"></h2>
+                    <div class="modal-price" id="modalPrice"></div>
+                    <div class="modal-full-desc" id="modalDesc"></div>
+                    
+                    <div class="modal-specs" id="modalSpecs"></div>
+                </div>
+                <button class="btn-checkout" id="modalAddBtn">Thêm Vào Giỏ Hàng & Đặt Hàng</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Giỏ Hàng Sidebar -->
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h3>Giỏ Hàng Của Bạn</h3>
+            <span style="font-size:30px; cursor:pointer;" onclick="toggleCart()">&times;</span>
+        </div>
+        <div class="cart-items-list" id="cartItemsList"></div>
+        <div class="cart-footer">
+            <div class="cart-total"><span>Tổng thanh toán:</span><span id="cartTotalAmount">0 đ</span></div>
+            <button class="btn-checkout" onclick="alert('Đơn đặt hàng từ Rickkey Studio của bạn đã được ghi lại thành công!')">Gửi Đơn Hàng</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Rickkey Studio. Tất cả hình ảnh thuộc bản quyền sở hữu của Instagram @rickkey2110.</p>
+    </footer>
+
+    <script>
+        const productsData = [
+            {
+                id: 0,
+                name: "Lucky65 V3 Pro Custom Set",
+                price: 1950000,
+                desc: "Bản Custom Lucky65 V3 Pro kết tinh từ vỏ nhôm CNC nguyên khối chống rung tối đa, kết hợp hệ thống foam lót tiêu âm 5 lớp cao cấp cho âm gõ phím dạng clack/thock trầm ấm cực kỳ nịnh tai. Sản phẩm đi kèm hệ sinh thái phụ kiện đồng bộ bao gồm cáp xoắn dù bọc lưới siêu bền, đầu phi công GX16 và nút bấm nghệ thuật Artisan tinh xảo ở phím ESC, mang lại góc làm việc sang trọng.",
+                specs: `<strong>Thông số & Hệ sinh thái đi kèm:</strong>
+                        <div>• Khung vỏ: <span>Nhôm CNC Anode nhám mịn cao cấp</span></div>
+                        <div>• Mạch phím: <span>Mạch xuôi tiêu chuẩn, Hotswap 5-pin chịu lực tốt</span></div>
+                        <div>• Kết nối: <span>3 Chế độ đa năng (Dây Type-C / Bluetooth / Wireless 2.4G)</span></div>
+                        <div>• Phụ kiện kèm: <span>1 Cáp xoắn Luxury phi công + 1 Artisan Keycap Resin thủ công</span></div>`,
+                images: [
+                    "z7945011605671_1f27f279e30a9bc79ff56a9e5255b613.jpg",
+                    "z7945011603191_d536133070e58d4595096fe4835ec19f.jpg",
+                    "z7945011616125_964d4a6c19b25b9ef6ff8c76ee604d1c.jpg",
+                    "z7945011629281_d55a2d79bef9f2aa5a7f7721fe013e00.jpg",
+                    "z7945011632905_1a8320bf7c8c3676a9f20c5c4e924e5f.jpg",
+                    "z7945011717366_a36f2c73857a3ecbba9125ed7c4b7f7a.jpg",
+                    "z7945011726576_b0a95cfed2d94f0b23b36a952d42948f.jpg"
+                ]
+            },
+            {
+                id: 1,
+                name: "GMK67 Custom Set Deluxe",
+                price: 1650000,
+                desc: "Bộ sản phẩm GMK67 Custom Set mang phong cách công nghệ hiện đại được tinh chỉnh toàn diện bởi Rickkey Studio. Sử dụng cấu trúc đệm Gasket Mount linh hoạt cùng chất liệu foam Poron hấp thụ âm thanh tối ưu, loại bỏ tiếng vang khó chịu khi gõ. Điểm nhấn đắt giá là cụm núm xoay kim loại điều chỉnh volume tiện lợi cùng layout 67 phím cực kỳ nhỏ gọn. Bộ phím đi kèm set keycap cao cấp và cáp dù xoắn phi công tone-sur-tone mang lại hiệu ứng thị giác tuyệt đỉnh trên bàn làm việc của bạn.",
+                specs: `<strong>Thông số & Hệ sinh thái đi kèm:</strong>
+                        <div>• Khung vỏ: <span>Cấu trúc Gasket Mount tiêu âm giảm lực chấn tốt</span></div>
+                        <div>• Núm xoay: <span>Kim loại cao cấp điều chỉnh nhanh âm lượng/độ sáng</span></div>
+                        <div>• Mạch phím: <span>Mạch xuôi LED RGB có hotswap dễ dàng thay switch</span></div>
+                        <div>• Kết nối: <span>3 Mode tiện dụng (Bluetooth 5.0 / Không dây 2.4Ghz / Type-C)</span></div>
+                        <div>• Phụ kiện kèm: <span>1 Cáp dù xoắn phi công bền bỉ + Đầu chuyển cao cấp</span></div>`,
+                images: [
+                    "z7945011790194_9afeb382f09b19321ba3850e9f2c9588.jpg",
+                    "z7945011800835_c7c756509e8549987c49d5cc94667167.jpg",
+                    "z7945011825701_54e04501468d3c13fc1bff5ace03be16.jpg",
+                    "z7945011933547_dd2b6a273c176bb001c5708047f83739.jpg",
+                    "z7945011949747_9c7a2a38e484b53ab11fba0f8c05b31b.jpg"
+                ]
+            },
+            {
+                id: 2,
+                name: "MonsGeek M1W V3 Custom Set",
+                price: 2250000,
+                desc: "Kiệt tác phím cơ cơ cấu nhôm đúc hạng nặng từ thương hiệu danh tiếng MonsGeek, được build mượt mà tỉ mỉ qua đôi bàn tay các kỹ sư tại Rickkey Studio. M1W V3 mang trên mình layout 75% thời thượng, trang bị mạch xuôi không cấn keycap, kết cấu switch được lube tay 100% cực kỳ trơn tru. Hệ sinh thái đi kèm không thể thiếu sợi dây dù xoắn lò xo đan lưới phi công, đầu bọc kim loại chắc chắn cùng bộ keycap phối sắc thanh lịch, sẵn sàng kiến tạo nên một không gian làm việc đỉnh cao siêu mượt mà.",
+                specs: `<strong>Thông số & Hệ sinh thái đi kèm:</strong>
+                        <div>• Khung vỏ: <span>Nhôm nặng nguyên khối Anodized chống va đập và cộng hưởng âm</span></div>
+                        <div>• Mạch phím: <span>Mạch xuôi (South-facing) tương thích tốt mọi loại keycap Cherry profile</span></div>
+                        <div>• Chế độ: <span>3 Chế độ kết nối siêu tốc, dung lượng pin cực khủng</span></div>
+                        <div>• Phụ kiện kèm: <span>1 Cáp xoắn dù phi công Metal + Bộ đệm stabilizer cân chỉnh cao cấp</span></div>`,
+                images: [
+                    "z7945011859901_a6f81d8d1a3ae04f9db9cddfc330aa96.jpg",
+                    "z7945011884900_e989d5aa54b0b21e9c86bb8df6fe83d6.jpg"
+                ]
+            },
+            {
+                id: 3,
+                name: "Wob Rainy75 Custom Set",
+                price: 2500000,
+                desc: "Được mệnh danh là ông vua phân khúc phím cơ cơ cấu nhôm nguyên khối, bản phối Rainy75 hoàn thiện đỉnh cao từ Rickkey Studio đem đến độ hoàn thiện tuyệt hảo đến từng milimet. Cấu trúc foam đặc biệt mang lại chất âm gõ phím vô cùng nịnh tai tựa tiếng mưa rơi mát mẻ. Đặc biệt, bộ sản phẩm được thiết lập hệ thống cáp phi công bọc dù đan lưới thép lò xo tinh xảo đồng bộ cùng tông màu thời thượng của phím, kiến tạo nên giá trị nghệ thuật đích thực.",
+                specs: `<strong>Thông số & Hệ sinh thái đi kèm:</strong>
+                        <div>• Khung vỏ: <span>Nhôm đúc CNC cao cấp, tạ gương mặt lưng tráng gương bóng loáng</span></div>
+                        <div>• Mạch phím: <span>Mạch xuôi FR4 flex-cut tối ưu cảm giác nhấn êm ái, hỗ trợ Hotswap</span></div>
+                        <div>• Switch & Stab: <span>Cân chỉnh stabilizer hoàn hảo, switch lube tay triệt tiêu tiếng lọc xọc</span></div>
+                        <div>• Phụ kiện kèm: <span>1 Cáp dù xoắn phi công Luxury + Set keycap phối sắc bản giới hạn</span></div>`,
+                images: [
+                    "z7945013851434_c0961ff35708563c15a228ae2aa80021.jpg",
+                    "z7945013902756_292f01b986ba5a0666200ebc279a19b7.jpg",
+                    "z7945013944684_e8d8ab663d6144ba09e414f4b9d80fb2.jpg",
+                    "z7945013956386_e1371f9ecc59dd4b219e056967b0ace7.jpg",
+                    "z7945013968592_7994cbec4915ef2a6e6943ac5190e127.jpg",
+                    "z7945013977418_2e18e471353a1441fd625ac255a917d7.jpg"
+                ]
+            },
+            {
+                id: 4,
+                name: "Weikav RO75 Custom Set Pro",
+                price: 1850000,
+                desc: "Mẫu bàn phím cơ Custom thế hệ mới Weikav RO75 gây ấn tượng mạnh mẽ bởi thiết kế góc cạnh đột phá cùng miếng tạ kim loại tạo điểm nhấn sang trọng ở mặt đáy. Vỏ phím chế tác hoàn hảo mang lại trọng lượng đầm chắc, kết hợp cùng hệ thống switch đã được xử lý cân chỉnh mượt mà tại Rickkey Studio mang đến phản hồi cơ học chính xác, triệt tiêu hoàn toàn tạp âm. Set phím sở hữu dây cáp dù xoắn phi công lõi thép siêu bền, là lựa chọn hoàn hảo hàng đầu cho cả nhu cầu setup góc làm việc tối giản hay gaming chuyên nghiệp.",
+                specs: `<strong>Thông số & Hệ sinh thái đi kèm:</strong>
+                        <div>• Khung vỏ: <span>Cấu trúc nhôm cao cấp, xử lý bề mặt nhám mịn phối tạ mặt lưng độc đáo</span></div>
+                        <div>• Layout: <span>75% nhỏ gọn thông minh, tối ưu diện tích di chuột</span></div>
+                        <div>• Mạch & Switch: <span>Mạch xuôi RGB, full foam Poron, switch & stab được lube tay mượt mà</span></div>
+                        <div>• Phụ kiện kèm: <span>1 Cáp dù xoắn phi công Luxury + Set keycap PBT Doubleshot bền bỉ</span></div>`,
+                images: [
+                    "z7945011681177_ec8b46f571dc04e374c9f4f06456f3e2.jpg",
+                    "z7945011687569_ad29c0865479ba12bad6d38f33331080.jpg",
+                    "z7945011895154_89ed9e4d64f0de0b961ee5cb97c248a7.jpg",
+                    "z7945011897137_5c42bb40a9472936b749535a7837555f.jpg"
+                ]
+            },
+            {
+                id: 5,
+                name: "Akko 5075B Plus Custom Set",
+                price: 1750000,
+                desc: "Siêu phẩm Akko 5075B Plus sở hữu hệ thống LED RGB rực rỡ dạng đôi chạy dọc hai cạnh sườn phím cực kỳ bắt mắt, tích hợp núm xoay kim loại đa chức năng sang trọng. Được lắp ráp hoàn thiện dựa trên bộ khung cấu trúc đệm Gasket Mount linh hoạt cùng lớp foam silicon dày dặn hấp thụ âm thanh tối ưu, mang lại tiếng gõ phím vô cùng trầm ấm (Thocky). Tại Rickkey Studio, sản phẩm được bổ sung set keycap thiết kế thời thượng và cáp bọc dù xoắn phi công cao cấp lõi thép, tạo nên sự liền mạch, hoàn hảo cho cả trải nghiệm gõ văn bản và không gian chơi game đỉnh cao.",
+                specs: `<strong>Thông số & Hệ sinh thái đi kèm:</strong>
+                        <div>• Khung vỏ: <span>Cấu trúc đệm Gasket Mount nhựa ABS cứng cáp cùng dải LED sườn đôi</span></div>
+                        <div>• Tính năng: <span>Núm xoay điều chỉnh Volume/LED tiện ích + Mạch Hotswap 5-pin</span></div>
+                        <div>• Kết nối: <span>3 Chế độ đa năng siêu tốc (Bluetooth 5.0 / Wireless 2.4Ghz / Dây Type-C)</span></div>
+                        <div>• Phụ kiện kèm: <span>1 Cáp bọc dù xoắn phi công Luxury + Keycap PBT chất lượng cao</span></div>`,
+                images: [
+                    "z7945011644656_4760cb7fb5d814ca8e886049371337e0.jpg",
+                    "z7945011647178_7d96884b5e89518d4ad85f771a999bb1.jpg"
+                ]
+            }
+        ];
+
+        let currentSlides = [0, 0, 0, 0, 0, 0];
+        let autoSlideTimers = [];
+
+        function moveCardSlide(prodId, direction) {
+            const imgs = productsData[prodId].images;
+            currentSlides[prodId] = (currentSlides[prodId] + direction + imgs.length) % imgs.length;
+            const slider = document.getElementById(`slider-${prodId}`);
+            if (slider) {
+                slider.style.transform = `translateX(-${currentSlides[prodId] * 100}%)`;
+            }
+        }
+
+        function startAutoSlides() {
+            autoSlideTimers[0] = setInterval(() => moveCardSlide(0, 1), 3500);
+            autoSlideTimers[1] = setInterval(() => moveCardSlide(1, 1), 4000);
+            autoSlideTimers[2] = setInterval(() => moveCardSlide(2, 1), 4500);
+            autoSlideTimers[3] = setInterval(() => moveCardSlide(3, 1), 5000);
+            autoSlideTimers[4] = setInterval(() => moveCardSlide(4, 1), 5500);
+            autoSlideTimers[5] = setInterval(() => moveCardSlide(5, 1), 6000);
+        }
+
+        window.onload = function() {
+            startAutoSlides();
+        };
+
+        function openProductModal(prodId) {
+            const pData = productsData[prodId];
+            
+            document.getElementById('modalTitle').innerText = pData.name;
+            document.getElementById('modalPrice').innerText = pData.price.toLocaleString('vi-VN') + ' đ';
+            document.getElementById('modalDesc').innerText = pData.desc;
+            document.getElementById('modalSpecs').innerHTML = pData.specs;
+            
+            const mainImg = document.getElementById('modalMainImg');
+            mainImg.src = pData.images[0];
+            
+            const thumbGrid = document.getElementById('modalThumbGrid');
+            thumbGrid.innerHTML = '';
+            
+            pData.images.forEach((imgUrl, index) => {
+                const thumb = document.createElement('img');
+                thumb.src = imgUrl;
+                thumb.className = `modal-thumb ${index === 0 ? 'active' : ''}`;
+                thumb.onclick = function() {
+                    mainImg.src = imgUrl;
+                    document.querySelectorAll('.modal-thumb').forEach(t => t.classList.remove('active'));
+                    thumb.classList.add('active');
+                };
+                thumbGrid.appendChild(thumb);
+            });
+
+            document.getElementById('modalAddBtn').onclick = function() {
+                addToCart(prodId);
+                closeProductModal();
+            };
+
+            document.getElementById('productModal').classList.add('active');
+        }
+
+        function closeProductModal() {
+            document.getElementById('productModal').classList.remove('active');
+        }
+
+        let cart = {};
+
+        function toggleCart() { document.getElementById('cartSidebar').classList.toggle('active'); }
+
+        function addToCart(prodId) {
+            if(cart[prodId]) {
+                cart[prodId].qty += 1;
+            } else {
+                cart[prodId] = {
+                    name: productsData[prodId].name,
+                    price: productsData[prodId].price,
+                    img: productsData[prodId].images[0],
+                    qty: 1
+                };
+            }
+            updateCartUI();
+        }
+
+        function removeFromCart(prodId) {
+            if (cart[prodId]) {
+                delete cart[prodId];
+            }
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const list = document.getElementById('cartItemsList');
+            list.innerHTML = '';
+            
+            let totalCount = 0;
+            let totalAmount = 0;
+
+            for (const id in cart) {
+                const item = cart[id];
+                totalCount += item.qty;
+                totalAmount += item.price * item.qty;
+
+                list.innerHTML += `
+                    <div class="cart-item">
+                        <img src="${item.img}" class="cart-item-img">
+                        <div style="flex:1;">
+                            <div style="font-size:13.5px; font-weight:600; color:var(--text-light);">${item.name}</div>
+                            <div style="color:var(--primary-color); font-size:13px; margin-top:3px; font-weight: 600; display:flex; justify-content:space-between; align-items:center;">
+                                <span>${item.price.toLocaleString('vi-VN')} đ x ${item.qty}</span>
+                                <button class="btn-remove-item" onclick="removeFromCart(${id})">🗑️ Xóa</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            if (totalCount === 0) {
+                list.innerHTML = '<div style="text-align:center; color:var(--text-gray); margin-top:40px; font-size:14px;">Giỏ hàng trống.</div>';
+            }
+
+            document.getElementById('cartCount').innerText = totalCount;
+            document.getElementById('cartTotalAmount').innerText = totalAmount.toLocaleString('vi-VN') + ' đ';
+            document.getElementById('cartSidebar').classList.add('active');
+        }
+    </script>
+</body>
+</html>
