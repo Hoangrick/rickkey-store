@@ -20,6 +20,7 @@
             margin: 0; padding: 0; box-sizing: border-box;
             font-family: '-apple-system', BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
+        [hidden] { display: none !important; }
 
         body {
             background-color: var(--bg-dark);
@@ -76,6 +77,16 @@
 
         /* Khung Grid sản phẩm */
         .shop-container { padding: 20px 3% 80px 3%; max-width: 1600px; margin: 0 auto; }
+        .layout-filters { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-bottom: 28px; }
+        .layout-filter {
+            padding: 9px 22px; background: var(--card-bg); color: var(--text-gray);
+            border: 1px solid var(--border-color); border-radius: 24px; cursor: pointer;
+            font-size: 13px; font-weight: 600; transition: 0.2s;
+        }
+        .layout-filter:hover, .layout-filter.active {
+            background: var(--primary-color); border-color: var(--primary-color); color: #fff;
+            box-shadow: 0 4px 14px rgba(0, 122, 255, 0.25);
+        }
         .products-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 24px; }
         
         .product-card {
@@ -169,6 +180,14 @@
         
         .cart-item { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; background: var(--bg-secondary); padding: 12px; border-radius: 8px; border: 1px solid var(--border-color); position: relative; }
         .cart-item-img { width: 60px; height: 60px; object-fit: cover; border-radius: 4px; }
+        .cart-item-details { flex: 1; min-width: 0; }
+        .cart-item-name { font-size: 13.5px; font-weight: 600; color: var(--text-light); margin-bottom: 6px; }
+        .cart-item-meta { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+        .cart-item-price { color: var(--primary-color); font-size: 13px; font-weight: 600; }
+        .quantity-controls { display: inline-flex; align-items: center; border: 1px solid var(--border-color); border-radius: 6px; overflow: hidden; }
+        .quantity-button { width: 25px; height: 25px; background: transparent; color: var(--text-light); border: 0; cursor: pointer; font-size: 16px; line-height: 1; }
+        .quantity-button:hover { background: rgba(0, 122, 255, 0.2); color: var(--primary-light); }
+        .quantity-value { min-width: 25px; text-align: center; color: var(--text-light); font-size: 12px; }
         .btn-remove-item {
             background: transparent; border: none; color: #ff453a; font-size: 12px; 
             font-weight: 600; cursor: pointer; padding: 4px 8px; border-radius: 4px; 
@@ -177,6 +196,61 @@
         .btn-remove-item:hover { background: rgba(255, 69, 58, 0.15); }
 
         .cart-footer { border-top: 1px solid var(--border-color); padding-top: 20px; }
+        .coupon-box { margin-bottom: 18px; }
+        .coupon-toggle { color: var(--primary-light); font-size: 12px; cursor: pointer; }
+        .coupon-toggle:hover { color: var(--text-light); }
+        .coupon-form-wrapper { display: none; margin-top: 8px; }
+        .coupon-form-wrapper.active { display: block; }
+        .coupon-label { display: block; color: var(--text-gray); font-size: 12px; margin-bottom: 7px; }
+        .coupon-form { display: flex; gap: 8px; }
+        .coupon-input {
+            min-width: 0; flex: 1; padding: 9px 10px; background: var(--bg-secondary);
+            color: var(--text-light); border: 1px solid var(--border-color); border-radius: 6px;
+            font-size: 13px; outline: none;
+        }
+        .coupon-input:focus { border-color: var(--primary-color); }
+        .btn-coupon {
+            padding: 9px 12px; background: transparent; color: var(--primary-light);
+            border: 1px solid var(--primary-color); border-radius: 6px; cursor: pointer;
+            font-size: 12px; font-weight: 600;
+        }
+        .btn-coupon:hover { background: var(--primary-color); color: #fff; }
+        .coupon-message { min-height: 18px; margin-top: 6px; font-size: 12px; }
+        .coupon-message.success { color: #34c759; }
+        .coupon-message.error { color: #ff453a; }
+        .cart-subtotal, .cart-discount { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; color: var(--text-gray); }
+        .cart-discount { color: #34c759; }
+        .cart-toast {
+            position: fixed; left: 50%; bottom: 28px; z-index: 5000;
+            transform: translate(-50%, 20px); opacity: 0; pointer-events: none;
+            background: #1d9b5f; color: #fff; padding: 12px 18px;
+            border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,.35);
+            font-size: 13px; font-weight: 600; transition: .25s ease;
+        }
+        .cart-toast.active { opacity: 1; transform: translate(-50%, 0); }
+        .order-fields { display: grid; gap: 8px; margin-bottom: 18px; }
+        .order-input {
+            width: 100%; padding: 9px 10px; background: var(--bg-secondary);
+            color: var(--text-light); border: 1px solid var(--border-color);
+            border-radius: 6px; font-size: 13px; outline: none;
+        }
+        .order-input:focus { border-color: var(--primary-color); }
+        .order-modal-overlay {
+            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.78);
+            backdrop-filter: blur(8px); z-index: 3500; display: flex;
+            justify-content: center; align-items: center; opacity: 0;
+            pointer-events: none; transition: 0.25s ease;
+        }
+        .order-modal-overlay.active { opacity: 1; pointer-events: auto; }
+        .order-modal {
+            width: min(92%, 500px); background: #111115; border: 1px solid var(--border-color);
+            border-radius: 16px; padding: 28px; position: relative; box-shadow: 0 20px 50px rgba(0,0,0,.8);
+        }
+        .order-modal h2 { color: var(--text-light); font-size: 22px; margin-bottom: 8px; }
+        .order-modal p { color: var(--text-gray); font-size: 13px; margin-bottom: 20px; }
+        .order-modal .order-fields { margin-bottom: 14px; }
+        .close-order-modal { position: absolute; top: 12px; right: 18px; font-size: 30px; color: var(--text-gray); cursor: pointer; }
+        .close-order-modal:hover { color: var(--primary-color); }
         .cart-total { display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 16px; font-weight: 600; color: var(--text-light); }
         .btn-checkout { width: 100%; padding: 14px; background: var(--primary-color); border: none; color: #ffffff; font-size: 15px; font-weight: 700; border-radius: 6px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: 0.2s; }
         .btn-checkout:hover { background: #0062cc; box-shadow: 0 4px 15px rgba(0, 122, 255, 0.4); }
@@ -202,7 +276,7 @@
         </a>
         <nav>
             <a href="#" class="active">Showroom Custom</a>
-            <a href="https://www.instagram.com/rickkey2110" target="_blank" class="btn-instagram">📸 Instagram</a>
+            <a href="https://www.instagram.com/rickkey2110" target="_self" rel="noopener" class="btn-instagram">📸 Instagram</a>
             <div class="cart-icon-container" onclick="toggleCart()">
                 <span>💼 Giỏ Hàng</span>
                 <div class="cart-count" id="cartCount">0</div>
@@ -219,10 +293,15 @@
 
     <!-- Khu Vực Trưng Bày Hệ 6 Sản Phẩm -->
     <section class="shop-container">
+        <div class="layout-filters" aria-label="Lọc theo layout bàn phím">
+            <button class="layout-filter active" type="button" data-layout="all" onclick="filterProducts('all', this)">Tất Cả</button>
+            <button class="layout-filter" type="button" data-layout="65" onclick="filterProducts('65', this)">65%</button>
+            <button class="layout-filter" type="button" data-layout="75" onclick="filterProducts('75', this)">75%</button>
+        </div>
         <div class="products-grid">
             
             <!-- SẢN PHẨM 1: LUCKY65 V3 PRO -->
-            <div class="product-card" onclick="openProductModal(0)">
+            <div class="product-card" data-layout="65" onclick="openProductModal(0)">
                 <div class="product-slider-box">
                     <button class="slide-arrow arrow-left" onclick="event.stopPropagation(); moveCardSlide(0, -1)">&#10094;</button>
                     <button class="slide-arrow arrow-right" onclick="event.stopPropagation(); moveCardSlide(0, 1)">&#10095;</button>
@@ -243,7 +322,7 @@
                         <p class="product-desc">Sản phẩm custom tối thượng chế tác thủ công từ vỏ nhôm CNC cao cấp, kết cấu mạch xuôi hotswap mượt mà cùng bộ phụ kiện cáp xoắn dù phi công và keycap nghệ thuật.</p>
                     </div>
                     <div class="product-bottom">
-                        <div class="product-price">1.950.000 đ</div>
+                        <div class="product-price">1.500.000 đ</div>
                         <!-- Đã đổi chữ tại đây -->
                         <button class="btn-add-cart" onclick="event.stopPropagation(); addToCart(0)">Thêm Vào Giỏ Hàng</button>
                     </div>
@@ -251,7 +330,7 @@
             </div>
 
             <!-- SẢN PHẨM 2: GMK67 -->
-            <div class="product-card" onclick="openProductModal(1)">
+            <div class="product-card" data-layout="65" onclick="openProductModal(1)">
                 <div class="product-slider-box">
                     <button class="slide-arrow arrow-left" onclick="event.stopPropagation(); moveCardSlide(1, -1)">&#10094;</button>
                     <button class="slide-arrow arrow-right" onclick="event.stopPropagation(); moveCardSlide(1, 1)">&#10095;</button>
@@ -278,7 +357,7 @@
             </div>
 
             <!-- SẢN PHẨM 3: MONSGEEK M1W -->
-            <div class="product-card" onclick="openProductModal(2)">
+            <div class="product-card" data-layout="75" onclick="openProductModal(2)">
                 <div class="product-slider-box">
                     <button class="slide-arrow arrow-left" onclick="event.stopPropagation(); moveCardSlide(2, -1)">&#10094;</button>
                     <button class="slide-arrow arrow-right" onclick="event.stopPropagation(); moveCardSlide(2, 1)">&#10095;</button>
@@ -302,7 +381,7 @@
             </div>
 
             <!-- SẢN PHẨM 4: RAINY75 -->
-            <div class="product-card" onclick="openProductModal(3)">
+            <div class="product-card" data-layout="75" onclick="openProductModal(3)">
                 <div class="product-slider-box">
                     <button class="slide-arrow arrow-left" onclick="event.stopPropagation(); moveCardSlide(3, -1)">&#10094;</button>
                     <button class="slide-arrow arrow-right" onclick="event.stopPropagation(); moveCardSlide(3, 1)">&#10095;</button>
@@ -330,7 +409,7 @@
             </div>
 
             <!-- SẢN PHẨM 5: WEIKAV RO75 -->
-            <div class="product-card" onclick="openProductModal(4)">
+            <div class="product-card" data-layout="75" onclick="openProductModal(4)">
                 <div class="product-slider-box">
                     <button class="slide-arrow arrow-left" onclick="event.stopPropagation(); moveCardSlide(4, -1)">&#10094;</button>
                     <button class="slide-arrow arrow-right" onclick="event.stopPropagation(); moveCardSlide(4, 1)">&#10095;</button>
@@ -356,7 +435,7 @@
             </div>
 
             <!-- SẢN PHẨM 6: AKKO 5075B PLUS -->
-            <div class="product-card" onclick="openProductModal(5)">
+            <div class="product-card" data-layout="75" onclick="openProductModal(5)">
                 <div class="product-slider-box">
                     <button class="slide-arrow arrow-left" onclick="event.stopPropagation(); moveCardSlide(5, -1)">&#10094;</button>
                     <button class="slide-arrow arrow-right" onclick="event.stopPropagation(); moveCardSlide(5, 1)">&#10095;</button>
@@ -413,21 +492,60 @@
         </div>
         <div class="cart-items-list" id="cartItemsList"></div>
         <div class="cart-footer">
+            <div class="coupon-box">
+                <div class="coupon-toggle" onclick="toggleCouponForm()">Bạn có mã giảm giá?</div>
+                <div class="coupon-form-wrapper" id="couponFormWrapper">
+                    <label class="coupon-label" for="couponInput">Nhập mã giảm giá</label>
+                    <div class="coupon-form">
+                        <input class="coupon-input" id="couponInput" type="text" placeholder="Nhập mã của bạn" autocomplete="off">
+                        <button class="btn-coupon" type="button" onclick="applyCoupon()">Áp dụng</button>
+                    </div>
+                    <div class="coupon-message" id="couponMessage" aria-live="polite"></div>
+                </div>
+            </div>
+            <div class="cart-subtotal"><span>Tạm tính:</span><span id="cartSubtotalAmount">0 đ</span></div>
+            <div class="cart-discount" id="cartDiscountRow" hidden><span id="cartDiscountLabel">Giảm giá:</span><span id="cartDiscountAmount">-0 đ</span></div>
             <div class="cart-total"><span>Tổng thanh toán:</span><span id="cartTotalAmount">0 đ</span></div>
-            <button class="btn-checkout" onclick="alert('Đơn đặt hàng từ Rickkey Studio của bạn đã được ghi lại thành công!')">Gửi Đơn Hàng</button>
+            <button class="btn-checkout" type="button" onclick="openOrderModal()">Đặt Hàng</button>
         </div>
     </div>
+
+    <div class="order-modal-overlay" id="orderModal" onclick="closeOrderModal()">
+        <div class="order-modal" onclick="event.stopPropagation()">
+            <span class="close-order-modal" onclick="closeOrderModal()">&times;</span>
+            <h2>Thông tin đặt hàng</h2>
+            <p>Vui lòng nhập thông tin để Rickkey Studio liên hệ xác nhận đơn hàng.</p>
+            <div class="order-fields">
+                <input class="order-input" id="customerName" type="text" placeholder="Họ và tên" autocomplete="name">
+                <input class="order-input" id="customerPhone" type="tel" placeholder="Số điện thoại" autocomplete="tel">
+                <textarea class="order-input" id="customerAddress" rows="3" placeholder="Địa chỉ nhận hàng" autocomplete="street-address"></textarea>
+            </div>
+            <div class="coupon-message" id="orderMessage" aria-live="polite"></div>
+            <button class="btn-checkout" type="button" onclick="submitOrder()">Gửi Đơn Hàng</button>
+        </div>
+    </div>
+
+    <div class="cart-toast" id="cartToast" role="status" aria-live="polite"></div>
 
     <footer>
         <p>&copy; 2026 Rickkey Studio. Tất cả hình ảnh thuộc bản quyền sở hữu của Instagram @rickkey2110.</p>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script>
+        // Replace these values with the IDs from your EmailJS account.
+        const EMAILJS_CONFIG = {
+            publicKey: 'xwYPz1TA_AeaaRivE',
+            serviceId: 'service_7g1bbfq',
+            templateId: 'template_bpyz6dj',
+            recipientEmail: 'tranminhhoan2110@gmail.com'
+        };
+
         const productsData = [
             {
                 id: 0,
                 name: "Lucky65 V3 Pro Custom Set",
-                price: 1950000,
+                price: 1500000,
                 desc: "Bản Custom Lucky65 V3 Pro kết tinh từ vỏ nhôm CNC nguyên khối chống rung tối đa, kết hợp hệ thống foam lót tiêu âm 5 lớp cao cấp cho âm gõ phím dạng clack/thock trầm ấm cực kỳ nịnh tai. Sản phẩm đi kèm hệ sinh thái phụ kiện đồng bộ bao gồm cáp xoắn dù bọc lưới siêu bền, đầu phi công GX16 và nút bấm nghệ thuật Artisan tinh xảo ở phím ESC, mang lại góc làm việc sang trọng.",
                 specs: `<strong>Thông số & Hệ sinh thái đi kèm:</strong>
                         <div>• Khung vỏ: <span>Nhôm CNC Anode nhám mịn cao cấp</span></div>
@@ -552,6 +670,14 @@
             autoSlideTimers[5] = setInterval(() => moveCardSlide(5, 1), 6000);
         }
 
+        function filterProducts(layout, selectedButton) {
+            document.querySelectorAll('.product-card').forEach(card => {
+                card.style.display = layout === 'all' || card.dataset.layout === layout ? '' : 'none';
+            });
+            document.querySelectorAll('.layout-filter').forEach(button => button.classList.remove('active'));
+            selectedButton.classList.add('active');
+        }
+
         window.onload = function() {
             startAutoSlides();
         };
@@ -595,8 +721,49 @@
         }
 
         let cart = {};
+        let appliedCouponRate = 0;
 
         function toggleCart() { document.getElementById('cartSidebar').classList.toggle('active'); }
+
+        function openOrderModal() {
+            if (Object.keys(cart).length === 0) {
+                const orderMessage = document.getElementById('orderMessage');
+                orderMessage.className = 'coupon-message error';
+                orderMessage.textContent = 'Vui lòng thêm sản phẩm vào giỏ hàng trước.';
+                document.getElementById('orderModal').classList.add('active');
+                return;
+            }
+            document.getElementById('orderModal').classList.add('active');
+        }
+
+        function closeOrderModal() {
+            document.getElementById('orderModal').classList.remove('active');
+        }
+
+        function toggleCouponForm() {
+            document.getElementById('couponFormWrapper').classList.toggle('active');
+        }
+
+        function applyCoupon() {
+            const input = document.getElementById('couponInput');
+            const message = document.getElementById('couponMessage');
+            const code = input.value.trim().toLowerCase();
+            const hasItems = Object.keys(cart).length > 0;
+
+            message.className = 'coupon-message';
+            if (code !== 'hoangkey' && code !== 'rickkey2110') {
+                appliedCouponRate = 0;
+                message.textContent = 'Mã giảm giá không hợp lệ.';
+            } else if (!hasItems) {
+                appliedCouponRate = 0;
+                message.textContent = 'Vui lòng thêm sản phẩm vào giỏ hàng trước.';
+            } else {
+                appliedCouponRate = code === 'hoangkey' ? 0.05 : 0.10;
+                message.className = 'coupon-message success';
+                message.textContent = `Áp dụng mã ${code} thành công - giảm ${appliedCouponRate * 100}% cho đơn đầu tiên.`;
+            }
+            updateCartUI();
+        }
 
         function addToCart(prodId) {
             if(cart[prodId]) {
@@ -610,6 +777,16 @@
                 };
             }
             updateCartUI();
+            showCartToast(`${productsData[prodId].name} đã được thêm vào giỏ hàng.`);
+        }
+
+        function updateCartQuantity(prodId, change) {
+            if (!cart[prodId]) return;
+            cart[prodId].qty += change;
+            if (cart[prodId].qty <= 0) {
+                delete cart[prodId];
+            }
+            updateCartUI();
         }
 
         function removeFromCart(prodId) {
@@ -619,25 +796,95 @@
             updateCartUI();
         }
 
+        let cartToastTimer;
+
+        function showCartToast(message) {
+            const toast = document.getElementById('cartToast');
+            toast.textContent = message;
+            toast.classList.add('active');
+            clearTimeout(cartToastTimer);
+            cartToastTimer = setTimeout(() => toast.classList.remove('active'), 2600);
+        }
+
+        async function submitOrder() {
+            const orderMessage = document.getElementById('orderMessage');
+            const customerName = document.getElementById('customerName').value.trim();
+            const customerPhone = document.getElementById('customerPhone').value.trim();
+            const customerAddress = document.getElementById('customerAddress').value.trim();
+            const items = Object.values(cart);
+
+            orderMessage.className = 'coupon-message';
+            if (items.length === 0) {
+                orderMessage.textContent = 'Vui lòng thêm sản phẩm vào giỏ hàng trước.';
+                return;
+            }
+            if (!customerName || !customerPhone || !customerAddress) {
+                orderMessage.textContent = 'Vui lòng nhập đầy đủ họ tên, số điện thoại và địa chỉ.';
+                return;
+            }
+            if (Object.values(EMAILJS_CONFIG).some(value => value.startsWith('YOUR_'))) {
+                orderMessage.textContent = 'EmailJS chưa được cấu hình. Hãy điền các ID EmailJS trong phần cấu hình.';
+                return;
+            }
+
+            const subtotal = items.reduce((sum, item) => sum + item.price * item.qty, 0);
+            const discount = appliedCouponRate > 0 ? Math.round(subtotal * appliedCouponRate) : 0;
+            const total = subtotal - discount;
+            const orderDetails = items
+                .map(item => `${item.name} x ${item.qty}: ${(item.price * item.qty).toLocaleString('vi-VN')} đ`)
+                .join('\n');
+
+            orderMessage.textContent = 'Đang gửi đơn hàng...';
+            try {
+                emailjs.init({ publicKey: EMAILJS_CONFIG.publicKey });
+                await emailjs.send(EMAILJS_CONFIG.serviceId, EMAILJS_CONFIG.templateId, {
+                    to_email: EMAILJS_CONFIG.recipientEmail,
+                    customer_name: customerName,
+                    customer_phone: customerPhone,
+                    customer_address: customerAddress,
+                    order_details: orderDetails,
+                    coupon_code: appliedCouponRate > 0 ? document.getElementById('couponInput').value.trim() : 'Không có',
+                    subtotal: subtotal.toLocaleString('vi-VN') + ' đ',
+                    discount: discount.toLocaleString('vi-VN') + ' đ',
+                    total: total.toLocaleString('vi-VN') + ' đ'
+                });
+                orderMessage.className = 'coupon-message success';
+                orderMessage.textContent = 'Đã gửi đơn hàng thành công. Rickkey Studio sẽ liên hệ với bạn sớm.';
+            } catch (error) {
+                orderMessage.className = 'coupon-message error';
+                const errorDetail = error && error.text ? ` (${error.text})` : '';
+                orderMessage.textContent = `Không thể gửi đơn hàng lúc này${errorDetail}`;
+                console.error('EmailJS order submission failed:', error);
+            }
+        }
+
         function updateCartUI() {
             const list = document.getElementById('cartItemsList');
             list.innerHTML = '';
             
             let totalCount = 0;
-            let totalAmount = 0;
+            let subtotal = 0;
 
             for (const id in cart) {
                 const item = cart[id];
                 totalCount += item.qty;
-                totalAmount += item.price * item.qty;
+                subtotal += item.price * item.qty;
 
                 list.innerHTML += `
                     <div class="cart-item">
                         <img src="${item.img}" class="cart-item-img">
-                        <div style="flex:1;">
-                            <div style="font-size:13.5px; font-weight:600; color:var(--text-light);">${item.name}</div>
-                            <div style="color:var(--primary-color); font-size:13px; margin-top:3px; font-weight: 600; display:flex; justify-content:space-between; align-items:center;">
-                                <span>${item.price.toLocaleString('vi-VN')} đ x ${item.qty}</span>
+                        <div class="cart-item-details">
+                            <div class="cart-item-name">${item.name}</div>
+                            <div class="cart-item-meta">
+                                <span class="cart-item-price">${item.price.toLocaleString('vi-VN')} đ</span>
+                                <span class="quantity-controls" aria-label="Số lượng ${item.name}">
+                                    <button class="quantity-button" type="button" onclick="updateCartQuantity(${id}, -1)" aria-label="Giảm số lượng">−</button>
+                                    <span class="quantity-value">${item.qty}</span>
+                                    <button class="quantity-button" type="button" onclick="updateCartQuantity(${id}, 1)" aria-label="Tăng số lượng">+</button>
+                                </span>
+                            </div>
+                            <div style="color:var(--primary-color); font-size:12px; margin-top:6px; font-weight:600;">
+                                Thành tiền: ${(item.price * item.qty).toLocaleString('vi-VN')} đ
                                 <button class="btn-remove-item" onclick="removeFromCart(${id})">🗑️ Xóa</button>
                             </div>
                         </div>
@@ -649,7 +896,15 @@
                 list.innerHTML = '<div style="text-align:center; color:var(--text-gray); margin-top:40px; font-size:14px;">Giỏ hàng trống.</div>';
             }
 
+            const discount = appliedCouponRate > 0 ? Math.round(subtotal * appliedCouponRate) : 0;
+            const totalAmount = subtotal - discount;
             document.getElementById('cartCount').innerText = totalCount;
+            document.getElementById('cartSubtotalAmount').innerText = subtotal.toLocaleString('vi-VN') + ' đ';
+            document.getElementById('cartDiscountAmount').innerText = '-' + discount.toLocaleString('vi-VN') + ' đ';
+            document.getElementById('cartDiscountLabel').innerText = `Giảm giá ${appliedCouponRate * 100}%:`;
+            const discountRow = document.getElementById('cartDiscountRow');
+            discountRow.hidden = discount === 0;
+            discountRow.style.display = discount > 0 ? 'flex' : 'none';
             document.getElementById('cartTotalAmount').innerText = totalAmount.toLocaleString('vi-VN') + ' đ';
             document.getElementById('cartSidebar').classList.add('active');
         }
