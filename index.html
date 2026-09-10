@@ -180,6 +180,14 @@
         
         .cart-item { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; background: var(--bg-secondary); padding: 12px; border-radius: 8px; border: 1px solid var(--border-color); position: relative; }
         .cart-item-img { width: 60px; height: 60px; object-fit: cover; border-radius: 4px; }
+        .cart-item-details { flex: 1; min-width: 0; }
+        .cart-item-name { font-size: 13.5px; font-weight: 600; color: var(--text-light); margin-bottom: 6px; }
+        .cart-item-meta { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+        .cart-item-price { color: var(--primary-color); font-size: 13px; font-weight: 600; }
+        .quantity-controls { display: inline-flex; align-items: center; border: 1px solid var(--border-color); border-radius: 6px; overflow: hidden; }
+        .quantity-button { width: 25px; height: 25px; background: transparent; color: var(--text-light); border: 0; cursor: pointer; font-size: 16px; line-height: 1; }
+        .quantity-button:hover { background: rgba(0, 122, 255, 0.2); color: var(--primary-light); }
+        .quantity-value { min-width: 25px; text-align: center; color: var(--text-light); font-size: 12px; }
         .btn-remove-item {
             background: transparent; border: none; color: #ff453a; font-size: 12px; 
             font-weight: 600; cursor: pointer; padding: 4px 8px; border-radius: 4px; 
@@ -212,6 +220,14 @@
         .coupon-message.error { color: #ff453a; }
         .cart-subtotal, .cart-discount { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; color: var(--text-gray); }
         .cart-discount { color: #34c759; }
+        .cart-toast {
+            position: fixed; left: 50%; bottom: 28px; z-index: 5000;
+            transform: translate(-50%, 20px); opacity: 0; pointer-events: none;
+            background: #1d9b5f; color: #fff; padding: 12px 18px;
+            border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,.35);
+            font-size: 13px; font-weight: 600; transition: .25s ease;
+        }
+        .cart-toast.active { opacity: 1; transform: translate(-50%, 0); }
         .order-fields { display: grid; gap: 8px; margin-bottom: 18px; }
         .order-input {
             width: 100%; padding: 9px 10px; background: var(--bg-secondary);
@@ -219,6 +235,22 @@
             border-radius: 6px; font-size: 13px; outline: none;
         }
         .order-input:focus { border-color: var(--primary-color); }
+        .order-modal-overlay {
+            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.78);
+            backdrop-filter: blur(8px); z-index: 3500; display: flex;
+            justify-content: center; align-items: center; opacity: 0;
+            pointer-events: none; transition: 0.25s ease;
+        }
+        .order-modal-overlay.active { opacity: 1; pointer-events: auto; }
+        .order-modal {
+            width: min(92%, 500px); background: #111115; border: 1px solid var(--border-color);
+            border-radius: 16px; padding: 28px; position: relative; box-shadow: 0 20px 50px rgba(0,0,0,.8);
+        }
+        .order-modal h2 { color: var(--text-light); font-size: 22px; margin-bottom: 8px; }
+        .order-modal p { color: var(--text-gray); font-size: 13px; margin-bottom: 20px; }
+        .order-modal .order-fields { margin-bottom: 14px; }
+        .close-order-modal { position: absolute; top: 12px; right: 18px; font-size: 30px; color: var(--text-gray); cursor: pointer; }
+        .close-order-modal:hover { color: var(--primary-color); }
         .cart-total { display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 16px; font-weight: 600; color: var(--text-light); }
         .btn-checkout { width: 100%; padding: 14px; background: var(--primary-color); border: none; color: #ffffff; font-size: 15px; font-weight: 700; border-radius: 6px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: 0.2s; }
         .btn-checkout:hover { background: #0062cc; box-shadow: 0 4px 15px rgba(0, 122, 255, 0.4); }
@@ -474,15 +506,26 @@
             <div class="cart-subtotal"><span>Tạm tính:</span><span id="cartSubtotalAmount">0 đ</span></div>
             <div class="cart-discount" id="cartDiscountRow" hidden><span id="cartDiscountLabel">Giảm giá:</span><span id="cartDiscountAmount">-0 đ</span></div>
             <div class="cart-total"><span>Tổng thanh toán:</span><span id="cartTotalAmount">0 đ</span></div>
+            <button class="btn-checkout" type="button" onclick="openOrderModal()">Đặt Hàng</button>
+        </div>
+    </div>
+
+    <div class="order-modal-overlay" id="orderModal" onclick="closeOrderModal()">
+        <div class="order-modal" onclick="event.stopPropagation()">
+            <span class="close-order-modal" onclick="closeOrderModal()">&times;</span>
+            <h2>Thông tin đặt hàng</h2>
+            <p>Vui lòng nhập thông tin để Rickkey Studio liên hệ xác nhận đơn hàng.</p>
             <div class="order-fields">
                 <input class="order-input" id="customerName" type="text" placeholder="Họ và tên" autocomplete="name">
                 <input class="order-input" id="customerPhone" type="tel" placeholder="Số điện thoại" autocomplete="tel">
-                <textarea class="order-input" id="customerAddress" rows="2" placeholder="Địa chỉ nhận hàng" autocomplete="street-address"></textarea>
+                <textarea class="order-input" id="customerAddress" rows="3" placeholder="Địa chỉ nhận hàng" autocomplete="street-address"></textarea>
             </div>
             <div class="coupon-message" id="orderMessage" aria-live="polite"></div>
             <button class="btn-checkout" type="button" onclick="submitOrder()">Gửi Đơn Hàng</button>
         </div>
     </div>
+
+    <div class="cart-toast" id="cartToast" role="status" aria-live="polite"></div>
 
     <footer>
         <p>&copy; 2026 Rickkey Studio. Tất cả hình ảnh thuộc bản quyền sở hữu của Instagram @rickkey2110.</p>
@@ -682,6 +725,21 @@
 
         function toggleCart() { document.getElementById('cartSidebar').classList.toggle('active'); }
 
+        function openOrderModal() {
+            if (Object.keys(cart).length === 0) {
+                const orderMessage = document.getElementById('orderMessage');
+                orderMessage.className = 'coupon-message error';
+                orderMessage.textContent = 'Vui lòng thêm sản phẩm vào giỏ hàng trước.';
+                document.getElementById('orderModal').classList.add('active');
+                return;
+            }
+            document.getElementById('orderModal').classList.add('active');
+        }
+
+        function closeOrderModal() {
+            document.getElementById('orderModal').classList.remove('active');
+        }
+
         function toggleCouponForm() {
             document.getElementById('couponFormWrapper').classList.toggle('active');
         }
@@ -719,6 +777,16 @@
                 };
             }
             updateCartUI();
+            showCartToast(`${productsData[prodId].name} đã được thêm vào giỏ hàng.`);
+        }
+
+        function updateCartQuantity(prodId, change) {
+            if (!cart[prodId]) return;
+            cart[prodId].qty += change;
+            if (cart[prodId].qty <= 0) {
+                delete cart[prodId];
+            }
+            updateCartUI();
         }
 
         function removeFromCart(prodId) {
@@ -726,6 +794,16 @@
                 delete cart[prodId];
             }
             updateCartUI();
+        }
+
+        let cartToastTimer;
+
+        function showCartToast(message) {
+            const toast = document.getElementById('cartToast');
+            toast.textContent = message;
+            toast.classList.add('active');
+            clearTimeout(cartToastTimer);
+            cartToastTimer = setTimeout(() => toast.classList.remove('active'), 2600);
         }
 
         async function submitOrder() {
@@ -795,10 +873,18 @@
                 list.innerHTML += `
                     <div class="cart-item">
                         <img src="${item.img}" class="cart-item-img">
-                        <div style="flex:1;">
-                            <div style="font-size:13.5px; font-weight:600; color:var(--text-light);">${item.name}</div>
-                            <div style="color:var(--primary-color); font-size:13px; margin-top:3px; font-weight: 600; display:flex; justify-content:space-between; align-items:center;">
-                                <span>${item.price.toLocaleString('vi-VN')} đ x ${item.qty}</span>
+                        <div class="cart-item-details">
+                            <div class="cart-item-name">${item.name}</div>
+                            <div class="cart-item-meta">
+                                <span class="cart-item-price">${item.price.toLocaleString('vi-VN')} đ</span>
+                                <span class="quantity-controls" aria-label="Số lượng ${item.name}">
+                                    <button class="quantity-button" type="button" onclick="updateCartQuantity(${id}, -1)" aria-label="Giảm số lượng">−</button>
+                                    <span class="quantity-value">${item.qty}</span>
+                                    <button class="quantity-button" type="button" onclick="updateCartQuantity(${id}, 1)" aria-label="Tăng số lượng">+</button>
+                                </span>
+                            </div>
+                            <div style="color:var(--primary-color); font-size:12px; margin-top:6px; font-weight:600;">
+                                Thành tiền: ${(item.price * item.qty).toLocaleString('vi-VN')} đ
                                 <button class="btn-remove-item" onclick="removeFromCart(${id})">🗑️ Xóa</button>
                             </div>
                         </div>
