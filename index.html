@@ -297,6 +297,7 @@
             <button class="layout-filter active" type="button" data-layout="all" onclick="filterProducts('all', this)">Tất Cả</button>
             <button class="layout-filter" type="button" data-layout="65" onclick="filterProducts('65', this)">65%</button>
             <button class="layout-filter" type="button" data-layout="75" onclick="filterProducts('75', this)">75%</button>
+            <button class="layout-filter" type="button" data-layout="100" onclick="filterProducts('100', this)">100%</button>
         </div>
         <div class="products-grid">
             
@@ -454,6 +455,34 @@
                         <div class="product-price">1.750.000 đ</div>
                         <!-- Đã đổi chữ tại đây -->
                         <button class="btn-add-cart" onclick="event.stopPropagation(); addToCart(5)">Thêm Vào Giỏ Hàng</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SẢN PHẨM 7: MONSGEEK M5W -->
+            <div class="product-card" data-layout="100" onclick="openProductModal(6)">
+                <div class="product-slider-box">
+                    <button class="slide-arrow arrow-left" onclick="event.stopPropagation(); moveCardSlide(6, -1)">&#10094;</button>
+                    <button class="slide-arrow arrow-right" onclick="event.stopPropagation(); moveCardSlide(6, 1)">&#10095;</button>
+                    <div class="slider-wrapper" id="slider-6">
+                        <img src="m5w-rickkey-1.jpg" alt="MonsGeek M5W full-size custom keyboard">
+                        <img src="m5w-rickkey-2.jpg" alt="MonsGeek M5W black keyboard">
+                        <img src="m5w-rickkey-3.jpg" alt="MonsGeek M5W white keyboard">
+                        <img src="m5w-rickkey-4.jpg" alt="MonsGeek M5W keyboard detail">
+                        <img src="m5w-rickkey-5.webp" alt="MonsGeek M5W purple keyboard">
+                        <img src="m5w-rickkey-6.webp" alt="MonsGeek M5W full-size keyboard">
+                        <img src="m5w-rickkey-7.jpg" alt="MonsGeek M5W color options">
+                    </div>
+                </div>
+                <div class="product-info">
+                    <div>
+                        <span class="product-tag">⌨️ Full-size 100%</span>
+                        <h3 class="product-name">MonsGeek M5W Custom Set</h3>
+                        <p class="product-desc">Bàn phím cơ full-size 100% cao cấp với khung nhôm chắc chắn, bố cục đầy đủ phím số và kết nối đa chế độ. Phiên bản được hoàn thiện và chèn logo Rickkey Studio riêng.</p>
+                    </div>
+                    <div class="product-bottom">
+                        <div class="product-price">2.000.000 đ</div>
+                        <button class="btn-add-cart" onclick="event.stopPropagation(); addToCart(6)">Thêm Vào Giỏ Hàng</button>
                     </div>
                 </div>
             </div>
@@ -646,10 +675,30 @@
                     "z7945011644656_4760cb7fb5d814ca8e886049371337e0.jpg",
                     "z7945011647178_7d96884b5e89518d4ad85f771a999bb1.jpg"
                 ]
+            },
+            {
+                id: 6,
+                name: "MonsGeek M5W Custom Set",
+                price: 2000000,
+                desc: "Bản custom MonsGeek M5W layout full-size 100% dành cho người cần đầy đủ cụm phím số nhưng vẫn yêu thích trải nghiệm phím cơ cao cấp. Khung vỏ chắc chắn, thiết kế tối giản hiện đại và hình ảnh đã được chèn logo Rickkey Studio.",
+                specs: `<strong>Thông số & Hệ sinh thái đi kèm:</strong>
+                        <div>• Layout: <span>Full-size 100%, đầy đủ cụm phím số</span></div>
+                        <div>• Khung vỏ: <span>Khung nhôm chắc chắn, hoàn thiện cao cấp</span></div>
+                        <div>• Kết nối: <span>Đa chế độ, linh hoạt cho bàn làm việc và gaming</span></div>
+                        <div>• Hoàn thiện: <span>Ảnh sản phẩm chèn logo Rickkey Studio</span></div>`,
+                images: [
+                    "m5w-rickkey-1.jpg",
+                    "m5w-rickkey-2.jpg",
+                    "m5w-rickkey-3.jpg",
+                    "m5w-rickkey-4.jpg",
+                    "m5w-rickkey-5.webp",
+                    "m5w-rickkey-6.webp",
+                    "m5w-rickkey-7.jpg"
+                ]
             }
         ];
 
-        let currentSlides = [0, 0, 0, 0, 0, 0];
+        let currentSlides = [0, 0, 0, 0, 0, 0, 0];
         let autoSlideTimers = [];
 
         function moveCardSlide(prodId, direction) {
@@ -668,6 +717,7 @@
             autoSlideTimers[3] = setInterval(() => moveCardSlide(3, 1), 5000);
             autoSlideTimers[4] = setInterval(() => moveCardSlide(4, 1), 5500);
             autoSlideTimers[5] = setInterval(() => moveCardSlide(5, 1), 6000);
+            autoSlideTimers[6] = setInterval(() => moveCardSlide(6, 1), 6500);
         }
 
         function filterProducts(layout, selectedButton) {
