@@ -291,7 +291,7 @@
         <p>Không gian trưng bày các kiệt tác cơ học giới hạn. Chọn sản phẩm để xem cấu hình chi tiết, album ảnh độ nét cao và đặt hàng nhanh chóng.</p>
     </section>
 
-    <!-- Khu Vực Trưng Bày Hệ 6 Sản Phẩm -->
+    <!-- Khu Vực Trưng Bày Sản Phẩm -->
     <section class="shop-container">
         <div class="layout-filters" aria-label="Lọc theo layout bàn phím">
             <button class="layout-filter active" type="button" data-layout="all" onclick="filterProducts('all', this)">Tất Cả</button>
@@ -487,10 +487,39 @@
                 </div>
             </div>
 
+            <!-- SẢN PHẨM 8: WEIKAV MAX102 -->
+            <div class="product-card" data-layout="100" onclick="openProductModal(7)">
+                <div class="product-slider-box">
+                    <button class="slide-arrow arrow-left" onclick="event.stopPropagation(); moveCardSlide(7, -1)">&#10094;</button>
+                    <button class="slide-arrow arrow-right" onclick="event.stopPropagation(); moveCardSlide(7, 1)">&#10095;</button>
+                    <div class="slider-wrapper" id="slider-7">
+                        <img src="weikav-max102-black-barebones.jpg" alt="Weikav MAX102 màu đen, khung và plate">
+                        <img src="weikav-max102-red-barebones.jpg" alt="Weikav MAX102 màu đỏ, khung và plate">
+                        <img src="weikav-max102-silver-keycaps.jpg" alt="Weikav MAX102 màu bạc với keycap đen">
+                        <img src="weikav-max102-coffee-keycaps.jpg" alt="Weikav MAX102 phối màu coffee">
+                        <img src="weikav-max102-teal-barebones.jpg" alt="Weikav MAX102 màu teal, khung và plate">
+                        <img src="weikav-max102-white-back.jpg" alt="Mặt lưng màu trắng của Weikav MAX102">
+                        <img src="weikav-max102-color-options.jpg" alt="Các màu sắc Weikav MAX102">
+                        <img src="weikav-max102-full-size-colors.jpg" alt="Weikav MAX102 full-size với nhiều phối màu">
+                    </div>
+                </div>
+                <div class="product-info">
+                    <div>
+                        <span class="product-tag">⌨️ Full-size 100%</span>
+                        <h3 class="product-name">Weikav MAX102</h3>
+                        <p class="product-desc">Bàn phím Weikav MAX102 layout full-size 100%, được giới thiệu qua bộ ảnh với nhiều màu sắc và góc nhìn sản phẩm.</p>
+                    </div>
+                    <div class="product-bottom">
+                        <div class="product-price">1.800.000 đ</div>
+                        <button class="btn-add-cart" onclick="event.stopPropagation(); addToCart(7)">Thêm Vào Giỏ Hàng</button>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </section>
 
-    <!-- BẢNG POPUP CHI TIẾT CHUNG CHO CẢ 6 SẢN PHẨM -->
+    <!-- BẢNG POPUP CHI TIẾT CHUNG CHO CÁC SẢN PHẨM -->
     <div class="modal-overlay" id="productModal" onclick="closeProductModal()">
         <div class="modal-container" onclick="event.stopPropagation()">
             <span class="close-modal" onclick="closeProductModal()">&times;</span>
@@ -695,10 +724,28 @@
                     "m5w-rickkey-6.webp",
                     "m5w-rickkey-7.jpg"
                 ]
+            },
+            {
+                id: 7,
+                name: "Weikav MAX102",
+                price: 1800000,
+                desc: "Bàn phím Weikav MAX102 layout full-size 100%, được giới thiệu qua bộ ảnh với nhiều màu sắc và góc nhìn sản phẩm.",
+                specs: `<strong>Thông tin sản phẩm:</strong>
+                        <div>• Layout: <span>Full-size 100%</span></div>`,
+                images: [
+                    "weikav-max102-black-barebones.jpg",
+                    "weikav-max102-red-barebones.jpg",
+                    "weikav-max102-silver-keycaps.jpg",
+                    "weikav-max102-coffee-keycaps.jpg",
+                    "weikav-max102-teal-barebones.jpg",
+                    "weikav-max102-white-back.jpg",
+                    "weikav-max102-color-options.jpg",
+                    "weikav-max102-full-size-colors.jpg"
+                ]
             }
         ];
 
-        let currentSlides = [0, 0, 0, 0, 0, 0, 0];
+        let currentSlides = [0, 0, 0, 0, 0, 0, 0, 0];
         let autoSlideTimers = [];
 
         function moveCardSlide(prodId, direction) {
@@ -718,6 +765,7 @@
             autoSlideTimers[4] = setInterval(() => moveCardSlide(4, 1), 5500);
             autoSlideTimers[5] = setInterval(() => moveCardSlide(5, 1), 6000);
             autoSlideTimers[6] = setInterval(() => moveCardSlide(6, 1), 6500);
+            autoSlideTimers[7] = setInterval(() => moveCardSlide(7, 1), 7000);
         }
 
         function filterProducts(layout, selectedButton) {

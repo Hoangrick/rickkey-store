@@ -10,7 +10,7 @@ Welcome to **Rickkey Studio**, a premium, high-end e-commerce storefront showcas
 ## ✨ Features
 
 - **Luxury Light Theme:** Clean Apple-inspired aesthetics with a vibrant white and sky-blue palette.
-- **Dynamic Product Showcase:** Displays a curated lineup of premium keyboards (`Lucky65 V3 Pro`, `Rainy75`, `MonsGeek M1W`, `Weikav RO75`, `Akko 5075B Plus`, and `GMK67`).
+- **Dynamic Product Showcase:** Displays a curated lineup of premium keyboards, including the full-size `MonsGeek M5W` and `Weikav MAX102` alongside `Lucky65 V3 Pro`, `Rainy75`, `MonsGeek M1W`, `Weikav RO75`, `Akko 5075B Plus`, and `GMK67`.
 - **Smooth Auto-Sliders:** Every product card features its own independent automatic image loop gallery.
 - **Deep-Dive Product Modals:** Clicking any card opens a beautifully structured overlay featuring high-definition thumbnail navigation, extensive write-ups, and complete spec sheets.
 - **Advanced Shopping Cart:** Dynamic quantity modifiers with a built-in real-time state manager and an instant item removal (`🗑️ Xóa`) utility.
